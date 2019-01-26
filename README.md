@@ -1,5 +1,7 @@
 # CSVImport
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/entercosmos/csv-import.svg)](https://greenkeeper.io/)
+
 [![npm package][npm-badge]][npm]
 
 Used for mapping and importing records from csv.
