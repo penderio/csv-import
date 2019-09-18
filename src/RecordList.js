@@ -1,41 +1,66 @@
 import React from 'react'
-import {css} from 'emotion'
-import RecordListItem from '@cmds/record-list-item'
+import { connect } from 'react-redux'
+import { css } from 'emotion'
+import RecordListItem from '@pndr/record-list-item'
+import { AutoSizer, List } from 'react-virtualized'
 
-export default class RecordList extends React.Component {
+class RecordList extends React.Component {
+
+    static defaultProps = {
+        defaultWidth: 100,
+        defaultHeight: 100
+    }
 
     render() {
 
-        const {records, fields, fieldRenderer, primaryFieldId} = this.props
+        const { records } = this.props
 
-        const visibleFieldOrder = this.props.visibleFieldOrder.filter(id => id !== primaryFieldId)
+        return (
+            <AutoSizer defaultHeight={this.props.defaultHeight} defaultWidth={this.props.defaultWidth}>
+                {({ width, height }) => (
+                    <List
+                        width={width}
+                        height={height}
+                        rowCount={records.length}
+                        rowHeight={118}
+                        rowRenderer={this.rowRenderer}
+                        style={{
+                            paddingTop: 16
+                        }}
+                    />
+                )}
+            </AutoSizer>
+        )
+    }
+
+    rowRenderer = ({ index, style }) => {
+
+        const { records, primaryFieldId, fields, fieldRenderer, visibleFieldOrder } = this.props
+
+        const record = records[index]
 
         return (
             <div
+                key={`record-${index}`}
+                style={style}
                 className={css`
                     padding-left: 16px;
-                    padding-top: 16px;
                     padding-right: 16px;
                 `}
             >
-                {records.map((record, index) => (
-                    <div
-                        key={`record-${index}`}
-                        className={css`
-                            margin-bottom: 16px;
-                        `}
-                    >
-                        <RecordListItem
-                            recordId={`record-${index}`}
-                            name={record[primaryFieldId] || 'Unnamed record'}
-                            primaryFieldId={primaryFieldId}
-                            fields={fields}
-                            visibleFieldOrder={visibleFieldOrder}
-                            fieldRenderer={fieldRenderer({record})}
-                        />
-                    </div>
-                ))}
+                <RecordListItem
+                    recordId={`record-${index}`}
+                    name={record[primaryFieldId]}
+                    primaryFieldId={primaryFieldId}
+                    fields={fields}
+                    visibleFieldOrder={visibleFieldOrder}
+                    fieldRenderer={fieldRenderer({ record })}
+                />
             </div>
         )
     }
 }
+
+export default connect((state, props) => ({
+    visibleFieldOrder: props.visibleFieldOrder.filter(id => id !== props.primaryFieldId)
+}))(RecordList)

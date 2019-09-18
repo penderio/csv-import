@@ -1,6 +1,6 @@
 import React from 'react'
-import {css} from 'emotion'
-import Switch from './Switch'
+import { css } from 'emotion'
+import Switch from '@pndr/switch'
 
 export default class CheckboxField extends React.Component {
 
@@ -17,7 +17,7 @@ export default class CheckboxField extends React.Component {
             >
                 <Switch
                     width={26}
-                    checked={this.props.value}
+                    value={this.props.value}
                 />
                 <div
                     className={css`

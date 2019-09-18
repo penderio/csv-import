@@ -19,8 +19,12 @@ export default class Select extends React.Component {
                     background-position: calc(100% - 6px) center;
                     padding: 8px;
                     padding-right: 22px;
-                    border: 1px solid #000;
+                    border: 1px solid #d9d9d9;
                     font-size: 14px;
+                    &:focus {
+                        outline: none;
+                        border: 1px solid #07f;
+                    }
                 `}
                 value={this.props.value || ''}
                 onChange={this.handleChange}

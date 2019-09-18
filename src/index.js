@@ -78,7 +78,7 @@ export default class Index extends React.Component {
                     height: 600px;
                     background-color: #fff;
                     position: relative;
-                    border: 1px solid #000;
+                    border: 1px solid #d9d9d9;
                     border-radius: 6px;
                 `}
             >
@@ -93,7 +93,6 @@ export default class Index extends React.Component {
                         width: 400px;
                         overflow-y: auto;
                         overflow-x: hidden;
-                        border-right: 1px solid #000;
                     `}
                         >
                             <div
@@ -159,7 +158,7 @@ export default class Index extends React.Component {
                                             className={css`
                                         display: flex;
                                         align-items: center;
-                                        border: 1px solid;
+                                        border: 1px solid #d9d9d9;
                                         margin-bottom: 8px;
                                         border-radius: 4px;
                                         padding: 8px;
@@ -218,6 +217,7 @@ export default class Index extends React.Component {
                         width: 800px;
                         overflow-x: hidden;
                         overflow-y: scroll;
+                        background-color: #f9f9f9;
                     `}
                         >
                             <RecordList
