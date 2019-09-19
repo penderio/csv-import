@@ -11,6 +11,7 @@
     "umd"
   ],
   "scripts": {
+    "deploy": "cd demo/dist && surge --project ./ --domain pndr-csv-import.surge.sh",
     "build": "nwb build-react-component",
     "clean": "nwb clean-module && nwb clean-demo",
     "prepublishOnly": "npm run build",
@@ -28,14 +29,15 @@
     "react": "16.x"
   },
   "devDependencies": {
-    "@pndr/record-list-item": "^0.2.0",
     "@pndr/attachment-field": "^0.8.0",
     "@pndr/checkbox-field": "^0.3.0",
+    "@pndr/demo-utils": "^0.3.0",
     "@pndr/link-to-another-record-field": "^0.5.0",
     "@pndr/long-text-field": "^0.3.1",
     "@pndr/multiple-select-field": "^0.6.0",
     "@pndr/number-field": "^0.7.0",
     "@pndr/record-gallery-card": "^0.8.1",
+    "@pndr/record-list-item": "^0.2.0",
     "@pndr/single-line-text-field": "^0.6.0",
     "@pndr/single-select-field": "^0.5.0",
     "faker": "^4.1.0",

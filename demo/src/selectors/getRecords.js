@@ -1,13 +1,19 @@
-const parseJSON = require('./../parseJSON')
+import parseJSON from '../parseJSON'
+import textToBoolean from '../textToBoolean'
+import textToLinkedItems from '../textToLinkedItems'
+import textToNumber from '../textToNumber'
 
 const defaultParser = value => value
 
 const parsers = {
-    checkbox: value => value === "1" || value === "true" || value === "yes",
-    linkToAnotherRecord: value => value.split(',')
+    checkbox: textToBoolean,
+    linkToAnotherRecord: textToLinkedItems,
+    multipleSelect: textToLinkedItems,
+    attachment: textToLinkedItems,
+    number: textToNumber,
 }
 
-export default ({data, mappings, fields, visibleFieldOrder}) => {
+export default ({ data, mappings, fields, visibleFieldOrder }) => {
 
     const fieldsById = fields.reduce((result, field) => {
         result[field.id] = field
@@ -23,11 +29,15 @@ export default ({data, mappings, fields, visibleFieldOrder}) => {
 
         return visibleFieldOrder.reduce((result, id) => {
 
-            const {columnId} = mappingsByFieldId[id]
-            const {value: columnIndex} = parseJSON(columnId)
+            const { columnId } = mappingsByFieldId[id]
+            const { value: columnIndex } = parseJSON(columnId)
             const data = row[columnIndex]
-            const {typeId} = fieldsById[id]
+            const { typeId } = fieldsById[id]
             const parser = parsers[typeId] || defaultParser
+            console.log({
+                typeId,
+                parser
+            })
             const value = parser(data)
             result[id] = value
 

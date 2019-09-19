@@ -32,6 +32,22 @@ store.dispatch({
             fieldId: 'fld4',
             enabled: false,
             columnId: stringifyJSON({value: 0})
+        }, {
+            fieldId: 'fld5',
+            enabled: false,
+            columnId: stringifyJSON({value: 0})
+        }, {
+            fieldId: 'fld6',
+            enabled: false,
+            columnId: stringifyJSON({value: 0})
+        }, {
+            fieldId: 'fld7',
+            enabled: false,
+            columnId: stringifyJSON({value: 0})
+        }, {
+            fieldId: 'fld8',
+            enabled: false,
+            columnId: stringifyJSON({value: 0})
         }]
     }
 })

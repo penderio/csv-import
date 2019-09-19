@@ -1,5 +1,5 @@
 import React from 'react'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import CSVImport from './../../src'
 import getRecords from './selectors/getRecords'
 import getColumns from './selectors/getColumns'
@@ -11,68 +11,136 @@ import SingleSelectField from '@pndr/single-select-field'
 import MultipleSelectField from '@pndr/multiple-select-field'
 import NumberField from '@pndr/number-field'
 import LinkToAnotherRecordField from '@pndr/link-to-another-record-field'
+import colors from './colors'
+import sample from 'lodash/sample'
+import uniq from 'lodash/uniq'
 
-const fieldRenderer = ({record}) => ({id, field, props}) => {
+let colorCache = {}
+
+const randomColor = (key) => {
+    const color = sample(colors)
+    if (colorCache[key]) {
+        return colorCache[key]
+    }
+    colorCache[key] = color.id
+    return color.id
+}
+
+const fieldRenderer = ({ record }) => ({ id, field, props }) => {
 
     const renderers = {
-        singleLineText: ({props, cell}) => (
+        singleLineText: ({ props, cell }) => (
             <SingleLineTextField
                 {...props}
                 text={cell}
             />
         ),
-        longText: ({props, cell}) => (
+        longText: ({ props, cell }) => (
             <LongTextField
                 {...props}
                 longText={cell.longText}
             />
         ),
-        checkbox: ({props, cell}) => (
+        checkbox: ({ props, cell }) => (
             <CheckboxField
                 {...props}
-                checked={cell}
+                checked={cell ? cell : false}
             />
         ),
-        attachment: ({props, cell}) => (
-            <AttachmentField
-                {...props}
-                attachments={cell.attachments}
-            />
-        ),
-        linkToAnotherRecord: ({props, cell}) => (
-            <LinkToAnotherRecordField
-                {...props}
-                records={cell.map(id => ({
-                    id,
-                    name: id
-                }))}
-            />
-        ),
-        multipleSelect: ({props, field, cell}) => (
-            <MultipleSelectField
-                {...props}
-                optionIds={cell.optionIds}
-                options={field.options.options}
-                optionOrder={field.options.optionOrder}
-                coloredOptions={field.options.coloredOptions}
-            />
-        ),
-        singleSelect: ({props, field, cell}) => (
-            <SingleSelectField
-                {...props}
-                optionId={cell.optionId}
-                options={field.options.options}
-                optionOrder={field.options.optionOrder}
-                coloredOptions={field.options.coloredOptions}
-            />
-        ),
-        number: ({props, field, cell}) => (
+        attachment: ({ props, cell }) => {
+
+            let attachments = null
+
+            if (cell) {
+                attachments = cell.map(url => ({
+                    id: name,
+                    thumbnails: {
+                        small: {
+                            url
+                        }
+                    }
+                }))
+            }
+
+            return (
+                <AttachmentField
+                    {...props}
+                    attachments={attachments}
+                />
+            )
+        },
+        linkToAnotherRecord: ({ props, cell }) => {
+
+            let records = []
+
+            if (cell) {
+
+                records = cell.map(name => ({
+                    id: name,
+                    name
+                }))
+            }
+
+            return (
+                <LinkToAnotherRecordField
+                    {...props}
+                    recordCount={cell ? cell.length : null}
+                    recordGetter={({ index }) => records[index]}
+                />
+            )
+        },
+        multipleSelect: ({ props, field, cell }) => {
+
+            let options = []
+
+            if (cell) {
+
+                cell = uniq(cell)
+
+                options = cell.map(cell => ({
+                    id: cell,
+                    colorId: randomColor(cell),
+                    name: cell
+                }))
+            }
+
+            return (
+                <MultipleSelectField
+                    {...props}
+                    optionIds={cell}
+                    options={options}
+                    coloredOptions={true}
+                />
+            )
+        },
+        singleSelect: ({ props, field, cell }) => {
+
+            let options = []
+
+            if (cell) {
+                options = [{
+                    id: cell,
+                    colorId: randomColor(cell),
+                    name: cell
+                }]
+            }
+
+            return (
+                <SingleSelectField
+                    {...props}
+                    optionId={cell}
+                    options={options}
+                    coloredOptions={true}
+                />
+            )
+        },
+        number: ({ props, field, cell }) => (
             <NumberField
                 {...props}
-                number={cell.number}
+                number={cell}
                 allowNegativeNumbers={field.options.allowNegativeNumbers}
                 numberFormatId={field.options.numberFormatId}
-                precisionId={field.options.precisionId}
+                precisionId={field.options.numberPrecisionId}
             />
         )
     }
@@ -93,11 +161,11 @@ const fieldRenderer = ({record}) => ({id, field, props}) => {
     })
 }
 
-const Example = ({dispatch, tableId, merge, firstRowHeaders, imported, columns, mappings, records, fields, visibleFieldOrder}) => (
+const Example = ({ dispatch, tableId, merge, firstRowHeaders, imported, columns, mappings, records, fields, visibleFieldOrder }) => (
     <div>
         <CSVImport
             imported={imported}
-            onImport={({data}) => {
+            onImport={({ data }) => {
 
                 dispatch({
                     type: 'SET_DATA_IN_CSV_IMPORT',
@@ -127,7 +195,7 @@ const Example = ({dispatch, tableId, merge, firstRowHeaders, imported, columns, 
             records={records}
             mappings={mappings}
             tableId={tableId}
-            onTableIdChange={({id, value}) => {
+            onTableIdChange={({ id, value }) => {
 
                 dispatch({
                     type: 'SET_TABLE_ID_IN_CSV_IMPORT',
@@ -138,7 +206,7 @@ const Example = ({dispatch, tableId, merge, firstRowHeaders, imported, columns, 
                 })
             }}
             merge={merge}
-            onMergeChange={({id, value}) => {
+            onMergeChange={({ id, value }) => {
 
                 dispatch({
                     type: 'SET_MERGE_IN_CSV_IMPORT',
@@ -149,7 +217,7 @@ const Example = ({dispatch, tableId, merge, firstRowHeaders, imported, columns, 
                 })
             }}
             firstRowHeaders={firstRowHeaders}
-            onFirstRowHeadersChange={({id, value}) => {
+            onFirstRowHeadersChange={({ id, value }) => {
 
                 dispatch({
                     type: 'SET_FIRST_ROW_HEADERS_IN_CSV_IMPORT',
@@ -159,7 +227,7 @@ const Example = ({dispatch, tableId, merge, firstRowHeaders, imported, columns, 
                     }
                 })
             }}
-            onMappingEnabledChange={({id, value}) => {
+            onMappingEnabledChange={({ id, value }) => {
 
                 dispatch({
                     type: 'SET_ENABLED_IN_MAPPING',
@@ -169,7 +237,7 @@ const Example = ({dispatch, tableId, merge, firstRowHeaders, imported, columns, 
                     }
                 })
             }}
-            onMappingColumnIdChange={({id, value}) => {
+            onMappingColumnIdChange={({ id, value }) => {
 
                 dispatch({
                     type: 'SET_COLUMN_ID_IN_MAPPING',
@@ -189,7 +257,7 @@ const Example = ({dispatch, tableId, merge, firstRowHeaders, imported, columns, 
 export default connect((state, props) => {
 
     const csvImport = state.cache.CSVImport['1']
-    const {tableId, merge, firstRowHeaders, data} = csvImport
+    const { tableId, merge, firstRowHeaders, data } = csvImport
 
     const records = [].concat(data)
 
@@ -201,13 +269,13 @@ export default connect((state, props) => {
         return state.cache.Mapping[id]
     })
 
-    const fields = mappings.map(({fieldId}) => {
+    const fields = mappings.map(({ fieldId }) => {
         return state.cache.Field[fieldId]
     })
 
     const visibleFieldOrder = mappings
-        .filter(({enabled}) => enabled)
-        .map(({fieldId}) => fieldId)
+        .filter(({ enabled }) => enabled)
+        .map(({ fieldId }) => fieldId)
 
     return {
         tableId,
@@ -225,8 +293,4 @@ export default connect((state, props) => {
         fields,
         visibleFieldOrder
     }
-
-    console.log(r)
-
-    return r
 })(Example)

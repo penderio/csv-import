@@ -1,4 +1,4 @@
-import {fromJS} from 'immutable'
+import { fromJS } from 'immutable'
 
 const initialState = {
     cache: {
@@ -17,13 +17,43 @@ const initialState = {
             },
             'fld3': {
                 id: 'fld3',
-                name: 'Published',
+                name: 'Done',
                 typeId: 'checkbox'
             },
             'fld4': {
                 id: 'fld4',
                 name: 'Friends',
                 typeId: 'linkToAnotherRecord'
+            },
+            'fld5': {
+                id: 'fld5',
+                name: 'Pictures',
+                typeId: 'attachment'
+            },
+            'fld6': {
+                id: 'fld6',
+                name: 'Categories',
+                typeId: 'multipleSelect'
+            },
+            'fld7': {
+                id: 'fld7',
+                name: 'Gender',
+                typeId: 'singleSelect'
+            },
+            'fld8': {
+                id: 'fld8',
+                name: 'Price',
+                typeId: 'number',
+                options: {
+                    allowNegativeNumbers: true,
+                    numberPrecisionId: '2',
+                    numberFormatId: 'decimal'
+                }
+            },
+            'fld9': {
+                id: 'fld9',
+                name: 'Notes',
+                typeId: 'longText'
             }
         }
     }
@@ -37,9 +67,9 @@ export default (state = initialState, action) => {
 
         case 'CREATE_CSV_IMPORT': {
 
-            const {id, tableId, firstRowHeaders, merge, data, mappings} = action.payload
+            const { id, tableId, firstRowHeaders, merge, data, mappings } = action.payload
 
-            mappings.forEach(({fieldId, enabled, columnId}) => {
+            mappings.forEach(({ fieldId, enabled, columnId }) => {
                 const mappingId = [id, fieldId].join('/')
                 state = state.setIn(['cache', 'Mapping', mappingId], fromJS({
                     id: mappingId,
@@ -63,7 +93,7 @@ export default (state = initialState, action) => {
 
         case 'SET_TABLE_ID_IN_CSV_IMPORT': {
 
-            const {id, tableId} = action.payload
+            const { id, tableId } = action.payload
 
             state = state.setIn(['cache', 'CSVImport', id, 'tableId'], tableId)
 
@@ -72,7 +102,7 @@ export default (state = initialState, action) => {
 
         case 'SET_MERGE_IN_CSV_IMPORT': {
 
-            const {id, merge} = action.payload
+            const { id, merge } = action.payload
 
             state = state.setIn(['cache', 'CSVImport', id, 'merge'], merge)
 
@@ -81,7 +111,7 @@ export default (state = initialState, action) => {
 
         case 'SET_FIRST_ROW_HEADERS_IN_CSV_IMPORT': {
 
-            const {id, firstRowHeaders} = action.payload
+            const { id, firstRowHeaders } = action.payload
 
             state = state.setIn(['cache', 'CSVImport', id, 'firstRowHeaders'], firstRowHeaders)
 
@@ -90,7 +120,7 @@ export default (state = initialState, action) => {
 
         case 'SET_DATA_IN_CSV_IMPORT': {
 
-            const {id, data} = action.payload
+            const { id, data } = action.payload
 
             state = state.setIn(['cache', 'CSVImport', id, 'data'], fromJS(data))
 
@@ -99,7 +129,7 @@ export default (state = initialState, action) => {
 
         case 'SET_ENABLED_IN_MAPPING': {
 
-            const {id, enabled} = action.payload
+            const { id, enabled } = action.payload
 
             state = state.setIn(['cache', 'Mapping', id, 'enabled'], enabled)
 
@@ -108,7 +138,7 @@ export default (state = initialState, action) => {
 
         case 'SET_COLUMN_ID_IN_MAPPING': {
 
-            const {id, columnId} = action.payload
+            const { id, columnId } = action.payload
 
             state = state.setIn(['cache', 'Mapping', id, 'columnId'], columnId)
 

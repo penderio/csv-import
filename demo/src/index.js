@@ -1,6 +1,7 @@
-import React, {Component} from 'react'
-import {render} from 'react-dom'
-import {css, injectGlobal} from 'emotion'
+import React, { Component } from 'react'
+import { render } from 'react-dom'
+import { css, injectGlobal } from 'emotion'
+import { Canvas, Box, Heading, Paragraph } from '@pndr/demo-utils'
 import Example from './Example'
 import Container from './Container'
 
@@ -13,28 +14,21 @@ injectGlobal`
     }
 `
 
-const Viewport = ({children}) => (
-    <div
-        className={css`
-            background-color: #e9ebee;
-            padding: 20px;
-        `}
-    >
-        {children}
-    </div>
-)
-
 class Demo extends Component {
     render() {
-        return <div>
-            <h1>CSVImport Demo</h1>
-            <Viewport>
-                <Container>
-                    <Example />
-                </Container>
-            </Viewport>
-        </div>
+        return (
+            <Canvas>
+                <Heading>
+                    Choose a file to import
+                </Heading>
+                <Box>
+                    <Container>
+                        <Example />
+                    </Container>
+                </Box>
+            </Canvas>
+        )
     }
 }
 
-render(<Demo/>, document.querySelector('#demo'))
+render(<Demo />, document.querySelector('#demo'))

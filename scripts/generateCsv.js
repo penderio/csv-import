@@ -26,15 +26,20 @@ const generateLinkedRecords = () => {
     })
 }
 
-const content = times(200).map(i => ([
+const content = times(50).map(i => ([
     faker.name.findName(),
     faker.internet.email(),
-    sample([null, 1]),
+    sample([null, 'Yes', 'checked']),
     generateLinkedRecords().join(','),
     generateAttachments().join(','),
-    ['opt1', 'opt2', 'opt3'].join(','),
-    sample(['opt1', 'opt2', 'opt3', null]),
-    32.25,
+    (() => {
+
+        const preferences = ['Airconditioning', 'Smoke free', 'Television']
+
+        return times(random(0, 3)).map(() => sample(preferences)).join(', ')
+    })(),
+    sample(['Female', 'Male', null]),
+    sample([null, random(0, 100, true), random(0, 100, false)]),
     `Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`
 ]))
 
@@ -43,15 +48,15 @@ const data = Papa.unparse({
     fields: [
         'First name',
         'Email address',
-        'Published',
+        'Done',
         'Friends',
         'Pictures',
-        'Colors',
-        'Color',
-        'Revenue',
+        'Preferences',
+        'Gender',
+        'Price',
         'Notes'
     ],
     data: content
 })
 
-fs.writeFileSync(__dirname + '/../demo/src/example.csv', data)
+fs.writeFileSync(__dirname + '/../demo/src/example-3.csv', data)
