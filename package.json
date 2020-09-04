@@ -22,7 +22,7 @@
   "dependencies": {
     "@cmds/record-list-item": "^0.2.0",
     "emotion": "^9.2.12",
-    "papaparse": "^4.6.2",
+    "papaparse": "^5.2.0",
     "react-dropzone": "^7.0.1"
   },
   "peerDependencies": {
